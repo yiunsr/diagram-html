@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <title>sample</title>
+    <link rel="stylesheet" href="../src/element/doc.css" crossorigin="anonymous" />
+    <script type="module" src="../src/element/doc.js"></script>
+
+  </head>
+
+  <body>
+    <button onclick="debuge_test01()">test</button>
+    
+    <d-div id="d-div-1" d-html="Test <b>bold</b> Test"></d-div>
+
+    <d-span id="d-span-1" d-html="span 1"></d-span>
+    <d-span id="d-span-1" d-html="span 2"></d-span>
+    
+    <script>
+      function debuge_test01(){
+        console.log("debuge_test01 start");
+        let main_div = document.getElementById("d-div-1");
+        main_div.setAttribute("d-html", `이것도 테스트다. <b>볼드</b> 테스트 끝`);
+      }
+
+    </script>
+  </body>
+</html>

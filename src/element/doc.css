@@ -1,0 +1,132 @@
+.debug-box{
+    outline: 1px black solid;
+    position: absolute;
+    z-index: -1010;
+  
+    border-color: rgba(0, 0, 0, 50%);
+    border-style: solid;
+    box-sizing: border-box;
+  }
+  
+  :root{
+    --node-margin-top: 4px;
+    --node-margin-right: 4px;
+    --node-margin-bottom : 4px;
+    --node-margin-left : 4px;
+  
+    --node-padding-top: 8px;
+    --node-padding-right: 8px;
+    --node-padding-bottom : 8px;
+    --node-padding-left : 8px;
+    
+    --node-terminal-half-size: 3px;
+  }
+  
+  d-doc{
+    --doc-width: 100vw;
+    --doc-height: 100vh;
+    
+    /* width: var(--doc-width);
+    height: var(--doc-height); */
+  }
+  
+  d-doc::part(doc){
+    position: relative;
+    width: 100%;
+    height: fit-content;
+  }
+  
+  d-doc::part(doc-back-svg), d-doc::part(doc-front-svg){
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  
+  
+  d-graph{
+    margin: 8px;
+    padding: 8px;
+    display: block;
+  }
+  
+  
+  
+  d-node{
+    display: inline-block;
+    border: 1px black solid;
+    padding: var(--node-padding-top) var(--node-padding-right) var(--node-padding-bottom) var(--node-padding-left);
+    margin: var(--node-margin-top) var(--node-margin-right) var(--node-margin-bottom) var(--node-margin-left);
+  }
+  
+  d-node[type=round]{
+    border-radius:  1em;
+  }
+  
+  d-node[type=oval]{
+    border-radius: 100px / 50px;
+  }
+  
+  d-node[type=parallelogram]{
+    border: 0px black solid;
+  }
+  d-node[type=parallelogram]::part(node){
+    border: 1px black solid;
+    transform: skew(20deg);
+  }
+  d-node[type=parallelogram]::part(content){
+    padding : 10px;
+    transform: skew(-20deg);
+  }
+  
+  
+  
+  d-node::part(node){
+    position: relative;
+  }
+  
+  
+  d-node::part(terminal){
+    border:1px solid black;
+    border-radius:50%;
+    display: block;
+    width: calc(2 * var(--node-terminal-half-size)); 
+    height: calc(2 * var(--node-terminal-half-size));
+    position: absolute;
+  }
+  d-node::part(terminal-top){
+    right: calc(50% - 4px);
+    top: calc(-1px - var(--node-terminal-half-size) - var(--node-padding-top));
+  }
+  
+  d-node::part(terminal-right){
+    right: calc(-1px - var(--node-terminal-half-size) - var(--node-padding-right));
+    top: calc(50% - 4px);
+  }
+  
+  d-node::part(terminal-bottom){
+    right: calc(50% - 4px);
+    bottom: calc(-1px - var(--node-terminal-half-size) - var(--node-padding-bottom));
+  }
+  
+  d-node::part(terminal-left){
+    left: calc(-1px - var(--node-terminal-half-size) - var(--node-padding-left));
+    top: calc(50% - 4px);
+  }
+  
+  d-edge{
+    position:absolute;
+    pointer-events: none;
+  
+    top:0px;
+    left:0px;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  
+  d-edge::part(svg){
+    position: relative;
+    z-index: 3;
+  }
+  
