@@ -1,0 +1,179 @@
+<html>
+<head>
+
+<style>
+
+html{
+  margin: 0px;
+  padding: 0px;
+}
+body{
+  margin: 0px;
+  padding: 0px;
+}
+
+#root{
+  /* A fixed size is required. */
+  width: 100vw;
+  /* height: 1200px; */
+  height: fit-content;
+
+  top: 0px;
+  left: 0px;
+  
+  outline: 1px black dotted;
+}
+.box{
+  min-width: 100px;
+  max-width: 200px;
+  border: 1px red solid;
+  margin: 4px;
+}
+.box2{
+  border: 1px red solid;
+  margin: 4px;
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+
+
+.debug{
+  outline: 1px black solid;
+  position: absolute;
+  z-index: -1;
+
+  border-color: rgba(0, 0, 0, 50%);
+  border-style: solid;
+  box-sizing: border-box;
+}
+</style>
+
+</head>
+
+
+<body>
+  <div>
+    <br/><br/>
+    <button onclick="addLine()">Add one line to line1.</button>
+    <br/><br/>
+    <button onclick="removeLine()">Remove one line to line1.</button>
+    <br/><br/>
+    
+  </div>
+  <div id="root">
+    <div id="box1" class="box">
+      box 1 <br/> box 1<br/>
+      <br/> 1111 <br/> 2222 <br/> 3333 <br/> 4444 <br/> 55555
+      <br/> 6666 <br/> 7777 <br/> 8888 <br/> 9999 <br/> AAAA
+    </div>
+
+    <div id="box2" class="box">
+      !!!!! target box !!!!!<br/>
+      box 2 <br/> box 2 
+      <br/> 1111 <br/> 2222 <br/> 3333 <br/> 4444 <br/> 55555
+      <br/> 6666 <br/> 7777 <br/> 8888 <br/> 9999 <br/> AAAA
+      <br/>box 2 <br/> box 2 
+    </div>
+
+    <div id="box3" class="box" >
+       box 3 <br/> box 3 
+      <br/> 1111 <br/> 2222 <br/> 3333 <br/> 4444 <br/> 55555
+      <br/> 6666 <br/> 7777 <br/> 8888 <br/> 9999 <br/> AAAA
+      <br/>box 3 <br/> box 3
+    </div>
+
+  </div>
+
+<script>
+
+const DEBUG = true;
+
+document.addEventListener("DOMContentLoaded", function(){
+  const root = document.querySelector('#root');
+  const target = document.querySelector('#box2');
+  easyObserver(root, target)
+  
+});
+
+function easyObserver(base, target){
+  let margin = getMarginFrom(base, target);
+
+  let options = {
+    root: base,
+    rootMargin: margin,
+    threshold: [1.0],       
+  };
+
+  const io = new IntersectionObserver(function(entries){
+    // When loading, the two sizes are exactly the same, so the rootmargin was set properly.
+    const checkValid = JSON.stringify(entries[0].boundingClientRect)  == JSON.stringify(entries[0].rootBounds)
+    console.log("IntersectionObserver ratio : ", entries[0].intersectionRatio, checkValid);
+  }, options);
+  io.observe(target);
+}
+
+// https://stackoverflow.com/a/26423749/6652082
+function getRelativePos(parent, child){
+  const parentPos = parent.getBoundingClientRect();
+  const childPos  = child.getBoundingClientRect();
+  const relativePos = {};
+
+  relativePos.top    = childPos.top - parentPos.top,
+  relativePos.right  = childPos.right - parentPos.right,
+  relativePos.bottom = childPos.bottom - parentPos.bottom,
+  relativePos.left   = childPos.left - parentPos.left;
+  return relativePos;
+}
+
+function getMarginFrom(parent, child){
+  const parentPos = parent.getBoundingClientRect();
+  const childPos  = child.getBoundingClientRect();
+  const bodyPos = child.getBoundingClientRect();
+
+  const top = -parentPos.top + childPos.top  ;
+  const left   = -parentPos.left + childPos.left ;
+  const right  = -childPos.right + parentPos.right;
+  const bottom = -childPos.bottom + parentPos.bottom ;
+
+  const $root = document.querySelector('#root');
+
+  const $body = document.querySelector('body');
+  let $div2 = document.createElement("div");
+
+  if(DEBUG){
+    $div2.classList.add("debug");
+    const relPos = getRelativePos($body, parent);
+    $div2.style.top = `${relPos.top}px`;
+    $div2.style.left = `${relPos.left}px`;
+    $div2.style.width = `${parentPos.width}px`;
+    $div2.style.height = `${parentPos.height}px`;
+    console.log("relPos :", relPos);
+  }
+
+  $div2.style.borderTopWidth = `${top}px`;
+  $div2.style.borderRightWidth = `${right}px`;
+  $div2.style.borderBottomWidth = `${bottom}px`;
+  $div2.style.borderLeftWidth = `${left}px`;
+  $body.append($div2);
+  
+  let margin = `${-top}px ${-right}px ${-bottom}px ${-left}px`;
+  console.log("root margin : ", margin);
+  return margin;
+}
+
+function addLine(){
+  const $box1 = document.querySelector('#box1');
+  $box1.innerHTML += "<br>!!!!!!!!!";
+}
+
+function removeLine(){
+  const $box1 = document.querySelector('#box1');
+  let html = $box1.innerHTML;
+  html = html.split("<br>");
+  html.splice(-1);
+  $box1.innerHTML = html.join("<br>");
+}
+</script>
+</body>
+</html>
